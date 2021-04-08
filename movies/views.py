@@ -2,14 +2,12 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.base import View
-
 from .models import Movie, Category, Actor, Genre
 from .forms import ReviewForm
 
 
 class GenreYear:
     """Жанры и года выхода фильмов"""
-
     def get_genres(self):
         return Genre.objects.all()
 
@@ -20,7 +18,7 @@ class GenreYear:
 class MoviesView(GenreYear, ListView):
     """Список фильмов"""
     model = Movie
-    queryset = Movie.objects.filter(draft=False).values("year")
+    queryset = Movie.objects.filter(draft=False)
 
 
 class MovieDetailView(GenreYear, DetailView):
@@ -31,7 +29,6 @@ class MovieDetailView(GenreYear, DetailView):
 
 class AddReview(View):
     """Отзывы"""
-
     def post(self, request, pk):
         form = ReviewForm(request.POST)
         movie = Movie.objects.get(id=pk)
@@ -53,7 +50,6 @@ class ActorView(GenreYear, DetailView):
 
 class FilterMoviesView(GenreYear, ListView):
     """Фильтр фильмов"""
-
     def get_queryset(self):
         queryset = Movie.objects.filter(
             Q(year__in=self.request.GET.getlist("year")) |
