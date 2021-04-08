@@ -22,6 +22,12 @@ class MovieDetailView(DetailView):
     model = Movie
     slug_field = "url"
 
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["categories"] = Category.objects.all()
+        return context
+
+
 
 class AddReview(View):
     """Отзывы"""
